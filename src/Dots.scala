@@ -24,7 +24,25 @@ class Dots extends MultiIOModule{
     val Dots_r = Mem(5,new Dots_point)
     val outDot_count_r = RegInit(0.U(3.W))
     when(reset.asBool()){
-        Dots_r(1).x := 23.U
+        Dots_r(0).x := "h42c80000".U
+        Dots_r(0).y := "h42c80000".U
+        Dots_r(0).z := "hc2c80000".U
+
+        Dots_r(1).x := "h42c80000".U
+        Dots_r(1).y := "hc2c80000".U
+        Dots_r(1).z := "hc2c80000".U
+
+        Dots_r(2).x := "hc2c80000".U
+        Dots_r(2).y := "h42c80000".U
+        Dots_r(2).z := "hc2c80000".U
+
+        Dots_r(3).x := "hc2c80000".U
+        Dots_r(3).y := "hc2c80000".U
+        Dots_r(3).z := "hc2c80000".U
+
+        Dots_r(4).x := "h0".U
+        Dots_r(4).y := "h0".U
+        Dots_r(4).z := "h42c80000".U
     }
 
     update_out := false.B

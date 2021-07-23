@@ -16,6 +16,38 @@ int main(void) {
     printf("%d\n",b);
     auto dut = std::make_shared<emu>();
 
+    dut->sw_spin = 3;
+    dut->sw_shift = 0;
+    dut->button_spin = 1;
+    dut->button_shift = 1;
+    dut->eval();
+    dut->clock = 0;
+    dut->eval();
+    dut->clock = 1;
+    dut->eval();
+
+    dut->button_spin = 1;
+    dut->eval();
+    dut->clock = 0;
+    dut->eval();
+    dut->clock = 1;
+    dut->eval();
+
+    dut->button_spin = 0;
+    dut->eval();
+    dut->clock = 0;
+    dut->eval();
+    dut->clock = 1;
+    dut->eval();
+
+    for(int i = 0;i < 100;i++){
+        dut->eval();
+        dut->clock = 0;
+        dut->eval();
+        dut->clock = 1;
+        dut->eval();
+    }
+    
     // dut->eval();
     // printf("fp_float:%f\n\n",f);
 
