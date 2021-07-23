@@ -11,7 +11,7 @@ class VGA_mem extends MultiIOModule{
     val v_addr = IO(Input(UInt(10.W)))
     val h_addr = IO(Input(UInt(10.W)))
     val data   = IO(Output(UInt(23.W)))
-    val update_en = IO(Input(Bool()))
+    val update_in = IO(Input(Bool()))
     val dot_Int_in = IO(Input(new Dots_point))
 
     val Dots_Int_r = Mem(5,new Dots_point)
@@ -48,7 +48,7 @@ class VGA_mem extends MultiIOModule{
 
     switch(state_r){
         is(sIdle){
-            when(update_en){
+            when(update_in){
                 state_r := sRead
                 read_count_r := 0.U
             }

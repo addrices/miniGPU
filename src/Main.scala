@@ -9,6 +9,6 @@ object MainDriver extends ChiselFlatSpec {
   def main(args: Array[String]): Unit = {
     (new ChiselStage).execute(
       args,
-      Seq(ChiselGeneratorAnnotation(() => new VGA_mem())))
+      Seq(ChiselGeneratorAnnotation(() => new Top())))
   }
 }

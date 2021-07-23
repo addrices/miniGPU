@@ -12,23 +12,46 @@ class Dots_point extends Bundle{
 }
 
 class Dots extends MultiIOModule{
-    val Dot_io = IO(Vec(5,Output(new Dots_point)))
-    val update_en = IO(Output(Bool()))
+    val Dot_io = IO(Output(new Dots_point))
+    val update_out = IO(Output(Bool()))
 
+    val update_in = IO(Input(Bool()))
+    val update_spsh = IO(Input(Bool()))    //0 spin 1 shift
+    val update_conf = IO(Input(UInt(2.W)))
 
-    val Dots_r = Seq.fill(5)(Reg(new Dots_point))
-    val count = RegInit(0.U(16.W))
-    count := count + 1.U
-    update_en := count === 10.U
+    val sIdle :: sUpdate :: sOutUpdate :: Nil = Enum(3)
+    val state_r = RegInit(sIdle)
+    val Dots_r = Mem(5,new Dots_point)
+    val outDot_count_r = RegInit(0.U(3.W))
     when(reset.asBool()){
         Dots_r(1).x := 23.U
     }
 
-    for(i <- 0 to 4){
-        Dot_io(i).x := Dots_r(i).x
-        Dot_io(i).y := Dots_r(i).y
-        Dot_io(i).z := Dots_r(i).z
+    update_out := false.B
+    switch(state_r){
+        is(sIdle){
+            when(update_in === true.B){
+                state_r := sUpdate
+            }
+        }
+        is(sUpdate){
+
+            when(true.B){
+                state_r := sOutUpdate
+                update_out := true.B
+                outDot_count_r := 0.U
+            }
+        }
+        is(sOutUpdate){
+            state_r := sIdle
+            outDot_count_r := outDot_count_r + 1.U
+            when(outDot_count_r === 4.U){
+                state_r := sIdle
+            }
+        }
     }
+    Dot_io <> Dots_r(outDot_count_r)
+
 }
 
 

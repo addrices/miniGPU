@@ -7,7 +7,7 @@ V_FILES := $(shell find $(SRC_DIR) -name "*.v")
 SV_FILES := $(shell find $(SRC_DIR) -name "*.sv")
 
 EMU_SRC_DIR := emu
-EMU_TOP_MODULE := fp_convert
+EMU_TOP_MODULE := Top
 EMU_TOP_V := $(OBJ_DIR)/emu_top.v
 EMU_MK := $(OBJ_DIR)/emu.mk
 EMU_BIN := $(OBJ_DIR)/emulator

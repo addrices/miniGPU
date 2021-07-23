@@ -16,22 +16,24 @@ int main(void) {
     printf("%d\n",b);
     auto dut = std::make_shared<emu>();
 
-    dut->fp_float = *((int*)&f);
-    dut->eval();
-    dut->clock = 0;
-    dut->eval();
-    dut->clock = 1;
-    dut->eval();
-    printf("int:%d\n",dut->fp_int);
-    
-    f = f+1;
-    dut->fp_float = *((int*)&f);
-    dut->eval();
-    dut->clock = 0;
-    dut->eval();
-    dut->clock = 1;
-    dut->eval();
-    printf("int:%d\n",dut->fp_int);
+    // dut->eval();
+    // printf("fp_float:%f\n\n",f);
+
+    // for(int i = 0;i < 10;i++){
+    //     dut->fp_float = *((int*)&f);
+    //     dut->clock = 0;
+    //     dut->eval();
+    //     dut->clock = 1;
+    //     dut->eval();
+    //     f = f+1;
+    // }
+    // dut->fp_float = *((int*)&f);
+    // dut->eval();
+    // dut->clock = 0;
+    // dut->eval();
+    // dut->clock = 1;
+    // dut->eval();
+    // printf("int:%d\n",dut->fp_int);
 
     return 0;
 }
