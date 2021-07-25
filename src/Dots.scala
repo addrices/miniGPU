@@ -54,14 +54,13 @@ class Dots extends MultiIOModule{
         }
         is(sUpdate){
 
-            when(true.B){
+            // when(true.B){
                 state_r := sOutUpdate
                 update_out := true.B
                 outDot_count_r := 0.U
-            }
+            // }
         }
         is(sOutUpdate){
-            state_r := sIdle
             outDot_count_r := outDot_count_r + 1.U
             when(outDot_count_r === 4.U){
                 state_r := sIdle
@@ -69,6 +68,7 @@ class Dots extends MultiIOModule{
         }
     }
     Dot_io <> Dots_r(outDot_count_r)
+    // printf("update_in:%d state:%d count_r%d update Dot %d %d %d\n",update_in,state_r,outDot_count_r,Dot_io.x,Dot_io.y,Dot_io.z)
 
 }
 

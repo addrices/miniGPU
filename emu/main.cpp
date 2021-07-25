@@ -16,6 +16,14 @@ int main(void) {
     printf("%d\n",b);
     auto dut = std::make_shared<emu>();
 
+    dut->reset = 1;
+    dut->eval();
+    dut->clock = 0;
+    dut->eval();
+    dut->clock = 1;
+    dut->eval();
+
+    dut->reset = 0;
     dut->sw_spin = 3;
     dut->sw_shift = 0;
     dut->button_spin = 1;
@@ -40,12 +48,28 @@ int main(void) {
     dut->clock = 1;
     dut->eval();
 
-    for(int i = 0;i < 100;i++){
+    for(int i = 0;i < 10;i++){
         dut->eval();
         dut->clock = 0;
         dut->eval();
         dut->clock = 1;
         dut->eval();
+    }
+
+    for(int a = 0; a < 800;a++){
+        for(int b = 0; b < 600;b++){
+
+            dut->v_addr = a;
+            dut->h_addr = b;
+            // dut->debug = 1;
+            dut->eval();
+            dut->clock = 0;
+            dut->eval();
+            dut->clock = 1;
+            dut->eval();
+            if(dut->data == 0xffffff)
+                printf("point %d %d\n",a,b);
+        }
     }
     
     // dut->eval();

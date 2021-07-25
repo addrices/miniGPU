@@ -14,7 +14,7 @@ class Top extends MultiIOModule{
     val v_addr = IO(Input(UInt(10.W)))
     val h_addr = IO(Input(UInt(10.W)))
     val data   = IO(Output(UInt(23.W)))
-
+    val debug  = IO(Input(UInt(10.W)))
 
     val ctrl = Module(new Control)
     val dots = Module(new Dots)
@@ -39,4 +39,5 @@ class Top extends MultiIOModule{
     vga_mem.v_addr <> v_addr
     vga_mem.h_addr <> h_addr
     vga_mem.data <> data
+    vga_mem.debug <> debug
 }

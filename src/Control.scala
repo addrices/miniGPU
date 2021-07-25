@@ -22,8 +22,8 @@ class Control extends MultiIOModule{
 
     val button_spin_event = Wire(Bool())
     val button_shift_event = Wire(Bool())
-    button_spin_event := button_spin_r === 1.U | button_spin === 0.U
-    button_shift_event := button_shift_r === 1.U | button_shift === 0.U
+    button_spin_event := button_spin_r === 1.U & button_spin === 0.U
+    button_shift_event := button_shift_r === 1.U & button_shift === 0.U
 
     when(button_spin_event){
         update_out := true.B
@@ -34,9 +34,10 @@ class Control extends MultiIOModule{
         update_spsh := true.B
         update_conf := sw_shift
     }.otherwise{
-        update_out := true.B
+        update_out := false.B
         update_spsh := DontCare
         update_conf := DontCare        
     }
+    // printf("%x %x\n",button_spin_event,button_shift_event)
 
 }

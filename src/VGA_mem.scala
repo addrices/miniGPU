@@ -10,9 +10,11 @@ import chisel3.core.SyncReadMem
 class VGA_mem extends MultiIOModule{
     val v_addr = IO(Input(UInt(10.W)))
     val h_addr = IO(Input(UInt(10.W)))
-    val data   = IO(Output(UInt(23.W)))
+    val data   = IO(Output(UInt(24.W)))
     val update_in = IO(Input(Bool()))
     val dot_Int_in = IO(Input(new Dots_point))
+    val debug = IO(Input(Bool())) 
+
 
     val Dots_Int_r = Mem(5,new Dots_point)
     val read_count_r = RegInit(0.U(3.W))
@@ -26,7 +28,7 @@ class VGA_mem extends MultiIOModule{
 
     val up_v = RegInit(0.U(10.W))
     val up_h = RegInit(0.U(10.W))
-    val up_addr = RegInit(0.U(10.W))
+    val up_addr = RegInit(0.U(20.W))
     val dot_flag = Wire(Bool())
     val check = Module(new CheckPix)
 
@@ -74,10 +76,18 @@ class VGA_mem extends MultiIOModule{
                 up_v := up_v + 1.U
             }
             when(dot_flag === true.B){
+                // printf("up_v:%d up_h:%d write %d 1\n",up_v,up_h,up_addr)
                 VGAMem.write(up_addr,1.U)
             }.otherwise{
                 VGAMem.write(up_addr,0.U)
             }
         }
+    }
+    when(debug){
+        printf("Dots_Int_r0 %x %x %x\n",Dots_Int_r(0).x, Dots_Int_r(0).y, Dots_Int_r(0).z)
+        printf("Dots_Int_r1 %x %x %x\n",Dots_Int_r(1).x, Dots_Int_r(1).y, Dots_Int_r(1).z)
+        printf("Dots_Int_r2 %x %x %x\n",Dots_Int_r(2).x, Dots_Int_r(2).y, Dots_Int_r(2).z)
+        printf("Dots_Int_r3 %x %x %x\n",Dots_Int_r(3).x, Dots_Int_r(3).y, Dots_Int_r(3).z)
+        printf("Dots_Int_r4 %x %x %x\n",Dots_Int_r(4).x, Dots_Int_r(4).y, Dots_Int_r(4).z)
     }
 }
