@@ -33,13 +33,6 @@ module fp_convert
         fp_float_4 <= fp_float_3;
         fp_float_5 <= fp_float_4;
         fp_float_6 <= fp_float_5;
-        // $display("%d",dataa);
-        // $display("%d",fp_float_1);
-        // $display("%d",fp_float_2);
-        // $display("%d",fp_float_3);
-        // $display("%d",fp_float_4);
-        // $display("%d",fp_float_5);
-        // $display("result:%d\n",result);
         fp2int(fp_float_6,__fp_int);
         result = __fp_int;
     end

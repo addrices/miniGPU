@@ -22,7 +22,7 @@ class VGA_mem extends MultiIOModule{
     val sIdle :: sRead :: sUpdate :: Nil = Enum(3)
     val state_r = RegInit(sIdle)
 
-    val VGAMem = SyncReadMem(16, Bits(width=1.W))
+    val VGAMem = SyncReadMem(480*640, Bits(width=8.W))
     val VGA_read = Wire(UInt(1.W))
     val VGAMemAddr = Wire(UInt(16.W))
 
@@ -39,15 +39,14 @@ class VGA_mem extends MultiIOModule{
     check.up_h <> up_h
     check.flag <> dot_flag
 
-    VGAMemAddr := h_addr * 800.U + v_addr
-    up_addr := up_h * 800.U + up_v
+    VGAMemAddr := h_addr * 640.U + v_addr
+    up_addr := up_h * 640.U + up_v
     VGA_read := VGAMem.read(VGAMemAddr,true.B)
     when(VGA_read === 0.U){
         data := "h000000".U
     }.otherwise{
         data := "hffffff".U
     }
-
     switch(state_r){
         is(sIdle){
             when(update_in){
@@ -65,9 +64,10 @@ class VGA_mem extends MultiIOModule{
             }
         }
         is(sUpdate){
-            when(up_v === 799.U){
+            when(up_v === 639.U){
                 up_v := 0.U
-                when(up_h === 599.U){
+                when(up_h === 479.U){
+                    // printf("update over")
                     state_r := sIdle
                 }.otherwise{
                     up_h := up_h + 1.U

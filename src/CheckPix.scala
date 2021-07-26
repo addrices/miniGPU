@@ -16,8 +16,8 @@ class CheckPix extends MultiIOModule{
     val dots_real = Seq.fill(5)(Wire(new Dots_point))
     for(i <- 0 until 5){
         dots_real(i).z := dot_Int_In(i).z
-        dots_real(i).x := (dot_Int_In(i).x.asSInt() + 400.S).asUInt()
-        dots_real(i).y := (dot_Int_In(i).y.asSInt() + 300.S).asUInt()
+        dots_real(i).x := (dot_Int_In(i).x.asSInt() + 320.S).asUInt()
+        dots_real(i).y := (dot_Int_In(i).y.asSInt() + 240.S).asUInt()
     }
 
     for(i <- 0 until 5){

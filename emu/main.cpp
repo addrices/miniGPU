@@ -48,7 +48,7 @@ int main(void) {
     dut->clock = 1;
     dut->eval();
 
-    for(int i = 0;i < 10;i++){
+    for(int i = 0;i < 1000;i++){
         dut->eval();
         dut->clock = 0;
         dut->eval();
@@ -56,8 +56,8 @@ int main(void) {
         dut->eval();
     }
 
-    for(int a = 0; a < 800;a++){
-        for(int b = 0; b < 600;b++){
+    for(int a = 0; a < 640;a++){
+        for(int b = 0; b < 480;b++){
 
             dut->v_addr = a;
             dut->h_addr = b;
@@ -71,7 +71,7 @@ int main(void) {
                 printf("point %d %d\n",a,b);
         }
     }
-    
+
     // dut->eval();
     // printf("fp_float:%f\n\n",f);
 

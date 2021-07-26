@@ -64,6 +64,7 @@ class Dots extends MultiIOModule{
             outDot_count_r := outDot_count_r + 1.U
             when(outDot_count_r === 4.U){
                 state_r := sIdle
+                outDot_count_r := 0.U
             }
         }
     }
