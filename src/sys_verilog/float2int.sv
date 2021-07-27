@@ -1,14 +1,3 @@
-// module fp_convert_chisel
-// (
-//     input logic io_clock,
-//     output logic [31:0] io_result,
-//     input logic [31:0] io_dataa
-// );
-
-// fp_convert fp_convert_impl(.clock(io_clock),.result(io_result),.dataa(io_dataa));    
-
-// endmodule
-
 module fp_convert
 (
     input  logic           clock,

@@ -13,7 +13,7 @@ class Top extends MultiIOModule{
 
     val v_addr = IO(Input(UInt(10.W)))
     val h_addr = IO(Input(UInt(10.W)))
-    val data   = IO(Output(UInt(23.W)))
+    val data   = IO(Output(UInt(24.W)))
     val debug  = IO(Input(UInt(10.W)))
 
     val ctrl = Module(new Control)

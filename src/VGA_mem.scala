@@ -6,6 +6,15 @@ import chisel3.stage.{ChiselStage, ChiselGeneratorAnnotation}
 import chisel3.iotesters.{ChiselFlatSpec, Driver, PeekPokeTester}
 import chisel3.core.SyncReadMem
 
+class vgamem extends BlackBox{
+    val io = IO(new Bundle {
+        val address = Input(UInt(16.W))
+        val clock   = Input(Clock())
+        val data    = Input(Bool())
+        val wren    = Input(Bool())
+        val q       = Output(Bool())
+    })
+}
 
 class VGA_mem extends MultiIOModule{
     val v_addr = IO(Input(UInt(10.W)))
@@ -22,15 +31,17 @@ class VGA_mem extends MultiIOModule{
     val sIdle :: sRead :: sUpdate :: Nil = Enum(3)
     val state_r = RegInit(sIdle)
 
-    val VGAMem = SyncReadMem(480*640, Bits(width=8.W))
-    val VGA_read = Wire(UInt(1.W))
-    val VGAMemAddr = Wire(UInt(16.W))
+    val VGAMem = Seq.fill(8)(Module(new vgamem))
+    val VGAMemAddr = Wire(UInt(19.W))
 
     val up_v = RegInit(0.U(10.W))
     val up_h = RegInit(0.U(10.W))
-    val up_addr = RegInit(0.U(20.W))
+    val up_addr = RegInit(0.U(19.W))
+    val VGAMemAddr_r = RegInit(0.U(19.W))
     val dot_flag = Wire(Bool())
     val check = Module(new CheckPix)
+    val q = Wire(Bool())
+    // val wren = Wire(Bool())
 
     for(i <- 0 to 4){
         check.dot_Int_In(i) := Dots_Int_r(i)
@@ -40,12 +51,34 @@ class VGA_mem extends MultiIOModule{
     check.flag <> dot_flag
 
     VGAMemAddr := h_addr * 640.U + v_addr
-    up_addr := up_h * 640.U + up_v
-    VGA_read := VGAMem.read(VGAMemAddr,true.B)
-    when(VGA_read === 0.U){
+    up_addr := up_h * 640.U + up_v 
+    VGAMemAddr_r := VGAMemAddr
+    when(VGAMemAddr_r === 152641.U){
+        printf("q:%d %x\n",q,data)
+    }
+
+    q := false.B
+    switch(VGAMemAddr_r(18,16)){
+        is(0.U){q := VGAMem(0).io.q}
+        is(1.U){q := VGAMem(1).io.q}
+        is(2.U){q := VGAMem(2).io.q}
+        is(3.U){q := VGAMem(3).io.q}
+        is(4.U){q := VGAMem(4).io.q}
+        is(5.U){q := VGAMem(5).io.q}
+        is(6.U){q := VGAMem(6).io.q}
+        is(7.U){q := VGAMem(7).io.q}
+    }
+ 
+    when(q === false.B){
         data := "h000000".U
     }.otherwise{
         data := "hffffff".U
+    }
+    for(i <- 0 to 7){
+        VGAMem(i).io.wren := false.B
+        VGAMem(i).io.data := false.B
+        VGAMem(i).io.address := Mux(state_r === sUpdate,up_addr(15,0),VGAMemAddr(15,0))
+        VGAMem(i).io.clock := clock
     }
     switch(state_r){
         is(sIdle){
@@ -67,7 +100,7 @@ class VGA_mem extends MultiIOModule{
             when(up_v === 639.U){
                 up_v := 0.U
                 when(up_h === 479.U){
-                    // printf("update over")
+                    printf("update over")
                     state_r := sIdle
                 }.otherwise{
                     up_h := up_h + 1.U
@@ -75,14 +108,18 @@ class VGA_mem extends MultiIOModule{
             }.otherwise{
                 up_v := up_v + 1.U
             }
-            when(dot_flag === true.B){
-                // printf("up_v:%d up_h:%d write %d 1\n",up_v,up_h,up_addr)
-                VGAMem.write(up_addr,1.U)
-            }.otherwise{
-                VGAMem.write(up_addr,0.U)
+            for(i <- 0 to 7){
+                when(i.U === up_addr(18,16)){
+                    VGAMem(i).io.wren := true.B
+                    VGAMem(i).io.data := dot_flag
+                }
             }
+            // when(dot_flag === true.B){
+            //     printf("up_v:%d up_h:%d write %d 1\n",up_v,up_h,up_addr)
+            // }
         }
     }
+    // printf("state_r:%d,VGAMemAddr:%d wren:%d\n",state_r,VGAMemAddr,VGAMem.io.wren)
     when(debug){
         printf("Dots_Int_r0 %x %x %x\n",Dots_Int_r(0).x, Dots_Int_r(0).y, Dots_Int_r(0).z)
         printf("Dots_Int_r1 %x %x %x\n",Dots_Int_r(1).x, Dots_Int_r(1).y, Dots_Int_r(1).z)

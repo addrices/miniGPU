@@ -56,6 +56,23 @@ int main(void) {
         dut->eval();
     }
 
+    for(int b = 0; b < 480;b++){
+        for(int a = 0; a < 640;a++){
+            dut->v_addr = a;
+            dut->h_addr = b;
+            // dut->debug = 1;
+            dut->eval();
+            dut->clock = 0;
+            dut->eval();
+            dut->clock = 1;
+            dut->eval();
+            // if(dut->data == 0xffffff)
+                // printf("point %d %d\n",a,b);
+        }
+    }
+
+    printf("aaaaa\n");
+
     for(int a = 0; a < 640;a++){
         for(int b = 0; b < 480;b++){
 
@@ -67,8 +84,8 @@ int main(void) {
             dut->eval();
             dut->clock = 1;
             dut->eval();
-            if(dut->data == 0xffffff)
-                printf("point %d %d\n",a,b);
+            if(dut->data != 0)
+                printf("point %d %d %x\n",a,b,dut->data);
         }
     }
 
