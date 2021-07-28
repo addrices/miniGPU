@@ -69,10 +69,12 @@ class VGA_mem extends MultiIOModule{
         is(7.U){q := VGAMem(7).io.q}
     }
  
-    when(q === false.B){
-        data := "h000000".U
-    }.otherwise{
+    when(q === true.B){
         data := "hffffff".U
+    }.elsewhen(v_addr === 240.U || h_addr === 320.U){
+        data := "hffff00".U
+    }.otherwise{
+        data := "h000000".U
     }
     for(i <- 0 to 7){
         VGAMem(i).io.wren := false.B

@@ -52,7 +52,7 @@ module fp_add (
         fp_float_b9 <= fp_float_b8;
         fp_float_b10 <= fp_float_b9;
 
-        fp_mul(fp_float_a10,fp_float_b10,__fp_int);
+        fp_add(fp_float_a10,fp_float_b10,__fp_int);
         result = __fp_int;
     end
 

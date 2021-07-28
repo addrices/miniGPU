@@ -26,10 +26,12 @@ class Control extends MultiIOModule{
     button_shift_event := button_shift_r === 1.U & button_shift === 0.U
 
     when(button_spin_event){
+        printf("spin %d %d \n",update_spsh,update_conf)
         update_out := true.B
         update_spsh := false.B
         update_conf := sw_spin
-    }.elsewhen(button_spin_event){
+    }.elsewhen(button_shift_event){
+        printf("shift\n")
         update_out := true.B
         update_spsh := true.B
         update_conf := sw_shift
@@ -38,6 +40,6 @@ class Control extends MultiIOModule{
         update_spsh := DontCare
         update_conf := DontCare        
     }
-    // printf("%x %x\n",button_spin_event,button_shift_event)
+    // printf("%x %x\n",button_shift_r,button_shift_event)
 
 }
