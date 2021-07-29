@@ -25,5 +25,9 @@ class CheckPix extends MultiIOModule{
             // printf("%x %x %x %x\n",up_v,up_h,dots_real(i).x,dots_real(i).y)
             flag := true.B
         }
+        // when(dots_real(i).x === up_v && dots_real(i).y === up_h){
+        //     // printf("%x %x %x %x\n",up_v,up_h,dots_real(i).x,dots_real(i).y)
+        //     flag := true.B
+        // }
     }
 }

@@ -53,9 +53,6 @@ class VGA_mem extends MultiIOModule{
     VGAMemAddr := h_addr * 640.U + v_addr
     up_addr := up_h * 640.U + up_v 
     VGAMemAddr_r := VGAMemAddr
-    when(VGAMemAddr_r === 152641.U){
-        printf("q:%d %x\n",q,data)
-    }
 
     q := false.B
     switch(VGAMemAddr_r(18,16)){
@@ -71,7 +68,7 @@ class VGA_mem extends MultiIOModule{
  
     when(q === true.B){
         data := "hffffff".U
-    }.elsewhen(v_addr === 240.U || h_addr === 320.U){
+    }.elsewhen(h_addr === 240.U || v_addr === 320.U){
         data := "hffff00".U
     }.otherwise{
         data := "h000000".U
