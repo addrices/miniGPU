@@ -11,23 +11,25 @@ Dots_r3 c2e7b0f2 418aeb26 c2c80000
 Dots_r4 00000000 00000000 42c80000
 */
 
-void fp2int(int fp_float,int *fp_int){
-    *fp_int = (int)*(float*)&fp_float;
-}
+extern "C" {
+    void fp2int(int fp_float,int *fp_int){
+        *fp_int = (int)*(float*)&fp_float;
+    }
 
-void fp_add(int dataa, int datab, int *result){
-    float result_f = (*(float*)&dataa + *(float*)&datab);
-    *result = *(int *)&result_f;
-}
+    void fp_add(int dataa, int datab, int *result){
+        float result_f = (*(float*)&dataa + *(float*)&datab);
+        *result = *(int *)&result_f;
+    }
 
-void fp_mul(int dataa, int datab, int *result){
-    float result_f = (*(float*)&dataa * *(float*)&datab);
-    *result = *(int *)&result_f;
+    void fp_mul(int dataa, int datab, int *result){
+        float result_f = (*(float*)&dataa * *(float*)&datab);
+        *result = *(int *)&result_f;
+    }
 }
 
 int main(void) {
     float f;
-    scanf("%f", &f);
+    int a  = scanf("%f", &f);
     printf("%x\n", *((int*)&f));
     int b;
     fp2int(*((int*)&f),&b);
